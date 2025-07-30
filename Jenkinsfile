@@ -1,9 +1,9 @@
 pipeline {  
 
-    agent any
+   agent any
         
     tools{
-        maven "Maven-3.9.9"
+        maven "mvn"
     }
     stages {
         stage('Clone') {
@@ -14,6 +14,16 @@ pipeline {
         stage('Build') {
             steps {
                sh 'mvn clean package'
+            }
+        }
+        stage('Docker img'){
+            steps {
+                sh 'docker build -t img .'
+            }
+        }
+        stage('Deployment'){
+            steps {
+                sh 'docker run -d -p 9090:8080 img'
             }
         }
     }
